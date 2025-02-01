@@ -1,0 +1,38 @@
+TC: O(N)
+SC: O(N)
+
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        map<int, map<int, multiset<int>>> nodes; // Stores nodes as {x: {y: {values}}}
+        queue<pair<TreeNode*, pair<int, int>>> todo; // BFS queue -> {node, {x, y}}
+        todo.push({root, {0, 0}}); // Start BFS from root at (0,0)
+
+        while (!todo.empty()) {
+            auto p = todo.front();
+            todo.pop();
+            TreeNode* temp = p.first;
+            int x = p.second.first;  // Horizontal distance
+            int y = p.second.second; // Depth level
+
+            nodes[x][y].insert(temp->val); // Store node value at (x, y)
+
+            if (temp->left) {
+                todo.push({temp->left, {x - 1, y + 1}}); // Left child -> move left (-1) and down (+1)
+            }
+            if (temp->right) {
+                todo.push({temp->right, {x + 1, y + 1}}); // Right child -> move right (+1) and down (+1)
+            }
+        }
+
+        vector<vector<int>> ans;
+        for (auto p : nodes) { // Iterate over horizontal distances (sorted)
+            vector<int> col;
+            for (auto q : p.second) { // Iterate over levels (sorted)
+                col.insert(col.end(), q.second.begin(), q.second.end()); // Merge sorted values
+            }
+            ans.push_back(col);
+        }
+        return ans;
+    }
+};
