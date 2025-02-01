@@ -1,0 +1,32 @@
+TC: O(N)
+SC: O(N)
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result;       // Stores final zigzag level order traversal
+        if (root == NULL) return result;  // Edge case: Empty tree
+        
+        queue<TreeNode*> q;               // Queue for BFS traversal
+        q.push(root);
+        bool lefttoright = true;          // Flag to track traversal direction
+        
+        while (!q.empty()) {
+            int n = q.size();             // Number of nodes in current level
+            vector<int> row(n);           // Stores values of the current level
+            
+            for (int i = 0; i < n; i++) {
+                TreeNode* node = q.front(); // Get the front node
+                q.pop();
+                int index = lefttoright ? i : (n - i - 1); // Determine index for zigzag order
+                row[index] = node->val;   // Assign value in correct position
+                
+                if (node->left) q.push(node->left);   // Push left child
+                if (node->right) q.push(node->right); // Push right child
+            }
+            
+            lefttoright = !lefttoright;   // Toggle direction
+            result.push_back(row);        // Store current level result
+        }
+        return result;
+    }
+};
