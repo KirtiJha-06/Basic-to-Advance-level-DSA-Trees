@@ -1,0 +1,12 @@
+TC: O(N)
+SC: o(H)
+
+class Solution {  
+public:  
+    bool isSameTree(TreeNode* p, TreeNode* q) {  
+        if (p == NULL || q == NULL) return (p == q); // If either is NULL, return true only if both are NULL  
+        return (p->val == q->val) // Check if values are equal  
+            && isSameTree(p->left, q->left) // Recursively check left subtrees  
+            && isSameTree(p->right, q->right); // Recursively check right subtrees  
+    }  
+};
